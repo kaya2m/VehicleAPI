@@ -11,17 +11,18 @@ using VehicleAPI.ApplicationContext;
 namespace Business.Concrete
 {
 
-    public class CarManager : VehicleRepository<Car>, ICarRepository
+    public class CarManager : ICarRepository
     {
         private readonly VehicleDbContext _vehicleDbContext;
         private readonly DbSet<Car> _dbset;
 
-        public CarManager(VehicleDbContext vehicleDbContext) :base(vehicleDbContext)
+        public CarManager(VehicleDbContext vehicleDbContext)
+
         {
             _vehicleDbContext = vehicleDbContext;
             _dbset = _vehicleDbContext.Set<Car>();
         }
-       
+
         public bool Delete(int id)
         {
             var findCar = _dbset.Find(id);
@@ -36,7 +37,7 @@ namespace Business.Concrete
 
         public List<Car> GetAll()
         {
-            return _dbset.OrderBy(c=>c.Id).ToList();
+            return _dbset.OrderBy(c => c.Id).ToList();
         }
         public bool HeadlightsStatus(int id)
         {
@@ -50,14 +51,17 @@ namespace Business.Concrete
 
             if (findCar.HeadlightsStatus == true)
                 return true;
-            else 
-               return false;
+            else
+                return false;
 
         }
         public Car GetByColor(string color)
         {
-            return _dbset.Where(c => c.VehicleColor == color)
-               .FirstOrDefault();
+            var car = _dbset.FirstOrDefault(c => c.VehicleColor == color);
+
+            return car;
         }
     }
+
 }
+

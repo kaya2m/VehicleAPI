@@ -30,7 +30,7 @@ namespace VehicleAPI.Controllers
         [HttpGet("color")]
         public IActionResult GetColor(string color) 
         {
-            var car = _carRepository.GetByColor("color");
+            var car = _carRepository.GetByColor(color);
             return Ok(car);
         }
 

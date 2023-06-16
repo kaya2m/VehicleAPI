@@ -8,10 +8,9 @@ namespace VehicleAPI.ApplicationContext
 {
     public class VehicleDbContext : DbContext
     {
-        public VehicleDbContext(DbContextOptions options) 
+        public VehicleDbContext(DbContextOptions<VehicleDbContext> options) 
             : base(options)
         {
-
         }
 
         public DbSet<Vehicle> Vehicles{ get; set; }
