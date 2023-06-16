@@ -1,6 +1,6 @@
 ﻿using Business.Interfaces;
 using Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,51 +10,54 @@ using VehicleAPI.ApplicationContext;
 
 namespace Business.Concrete
 {
-    public class CarManager : ICarService
+
+    public class CarManager : VehicleRepository<Car>, ICarRepository
     {
         private readonly VehicleDbContext _vehicleDbContext;
-        private readonly ICarService _carService;
-        public CarManager(VehicleDbContext vehicleDbContext, ICarService carService)
+        private readonly DbSet<Car> _dbset;
+
+        public CarManager(VehicleDbContext vehicleDbContext) :base(vehicleDbContext)
         {
             _vehicleDbContext = vehicleDbContext;
-            _carService = carService;
+            _dbset = _vehicleDbContext.Set<Car>();
+        }
+       
+        public bool Delete(int id)
+        {
+            var findCar = _dbset.Find(id);
+            if (findCar != null)
+            {
+                _dbset.Remove(findCar);
+                _vehicleDbContext.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public void Create(Car car)
+        public List<Car> GetAll()
         {
-           var CreateCar = _vehicleDbContext.Cars.Add(car);
+            return _dbset.OrderBy(c=>c.Id).ToList();
+        }
+        public bool HeadlightsStatus(int id)
+        {
+            var findCar = _dbset.Find(id);
+            if (findCar != null)
+            {
+                findCar.HeadlightsStatus = !findCar.HeadlightsStatus;
+
+            }
             _vehicleDbContext.SaveChanges();
-            
+
+            if (findCar.HeadlightsStatus == true)
+                return true;
+            else 
+               return false;
 
         }
-
-        public void Delete(int id)
+        public Car GetByColor(string color)
         {
-            var FindCar = _vehicleDbContext.Cars.Find(id);
-            var DeleteCar = _vehicleDbContext.Cars.Remove(FindCar);
-            _vehicleDbContext.SaveChanges();
-        }
-
-        public List<Car> GetAllCar()
-        {
-            var LisToCar = _vehicleDbContext.Cars.ToList();
-            return LisToCar;
-        }
-
-        public Car GetCarByColor(string color)
-        {
-            var findCar = _vehicleDbContext.Cars.Find(color);
-            
-            return findCar;
-        }
-
-        public void Update(Car car)
-        {
-            var find = _vehicleDbContext.Cars.Find(car);
-            var updateCar = _vehicleDbContext.Cars.Update(find);
-            _vehicleDbContext.SaveChanges();
-           
-
+            return _dbset.Where(c => c.VehicleColor == color)
+               .FirstOrDefault();
         }
     }
 }

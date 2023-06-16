@@ -2,6 +2,8 @@
 using Business.Interfaces;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
+using VehicleAPI.ApplicationContext;
 
 namespace VehicleAPI.Controllers
 {
@@ -9,19 +11,46 @@ namespace VehicleAPI.Controllers
     [Route("api/[controller]")]
     public class CarController :ControllerBase
     {
-        private readonly ICarService _carService;
+        private readonly IVehicleRepository<Car> _vehicleRepository;
+        private readonly ICarRepository _carRepository;
 
-        public CarController(ICarService carService)
+        public CarController(IVehicleRepository<Car> vehicleRepository, ICarRepository carRepository)
         {
-            _carService = carService;
+            _vehicleRepository = vehicleRepository;
+            _carRepository = carRepository;
         }
 
         [HttpGet]
-        public IActionResult GetAllCars() 
+        public List<Car> GetAllCars() 
         {
-            var response = _carService.GetAllCar();
-            return Ok(response);
+            var car = _carRepository.GetAll();
+            return car;
         }
-       
+
+        [HttpGet("color")]
+        public IActionResult GetColor(string color) 
+        {
+            var car = _carRepository.GetByColor("color");
+            return Ok(car);
+        }
+
+        [HttpPost("{id}/headlights")]
+        public IActionResult HeadlightsStatus(int id)
+        {
+            var car = _carRepository.HeadlightsStatus(id);
+          return Ok(car);
+            
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCar(int id)
+        {
+            var deleted = _carRepository.Delete(id);
+            if (deleted)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

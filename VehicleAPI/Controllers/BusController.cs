@@ -1,4 +1,6 @@
 ﻿
+using Business.Interfaces;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using VehicleAPI.ApplicationContext;
 
@@ -8,33 +10,39 @@ namespace VehicleAPI.Controllers
     [Route("api/[controller]")]
     public class BusController : ControllerBase
     {
-        private readonly VehicleDbContext _vehicleDbContext;
+        private readonly IVehicleRepository<Bus> _vehicleRepository;
+        private readonly IBusRepository _busRepository;
 
-        public BusController(VehicleDbContext vehicleDbContext)
+        public BusController(IVehicleRepository<Bus> vehicleRepository, IBusRepository busRepository)
         {
-            _vehicleDbContext = vehicleDbContext;
+            _vehicleRepository = vehicleRepository;
+            _busRepository = busRepository;
         }
 
         [HttpGet]
-        public IActionResult GetAllBus()
+        public List<Bus> GetAllBus()
         {
-            var buses = _vehicleDbContext.Buss.ToList();
-            return Ok(buses);
+            var bus = _busRepository.GetAll();
+            return bus;
         }
-        [HttpGet("color")]
-        public IActionResult GetBusByByColor(string color)
-        {
-            var buses = _vehicleDbContext.Buss.Select(b => b.VehicleColor == color);
-            return Ok(buses);
 
+        [HttpGet("color")]
+        public IActionResult GetColor(string color)
+        {
+            var bus = _busRepository.GetByColor("color");
+            return Ok(bus);
         }
-        [HttpDelete("id")]
+
+        [HttpDelete("{id}")]
         public IActionResult DeleteBus(int id)
         {
-            var findC = _vehicleDbContext.Buss.Find(id);
-            var buses = _vehicleDbContext.Buss.Remove(findC);
-            return Ok(buses);
+            var deleted = _busRepository.Delete(id);
+            if (deleted)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
-       
+
     }
 }

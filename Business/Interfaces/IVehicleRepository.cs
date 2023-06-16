@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities
+namespace Business.Interfaces
 {
-    public class Car : Vehicle
+    public interface IVehicleRepository<T>
     {
-        //teker eklenecek
-        public bool HeadlightsStatus { get; set; }
-
+        List<T> GetAll();
+        bool Delete(int id);
     }
 }
