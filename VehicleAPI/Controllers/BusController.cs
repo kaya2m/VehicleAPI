@@ -27,10 +27,13 @@ namespace VehicleAPI.Controllers
         }
 
         [HttpGet("color")]
-        public IActionResult GetColor(string color)
+        public IActionResult GetByColor(string color)
         {
-            var bus = _busRepository.GetByColor("color");
-            return Ok(bus);
+            var bus = _busRepository.GetAll().Where(c => c.VehicleColor == color);
+            
+            var allSameBus= new List<Bus>();
+            allSameBus.AddRange(bus);
+            return Ok(allSameBus);
         }
 
         [HttpDelete("{id}")]

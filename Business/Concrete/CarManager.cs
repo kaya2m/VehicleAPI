@@ -55,9 +55,9 @@ namespace Business.Concrete
                 return false;
 
         }
-        public Car GetByColor(string color)
+        public List<Car> GetByColor(string color)
         {
-            var car = _dbset.FirstOrDefault(c => c.VehicleColor == color);
+            var car = _dbset.Where(c => c.VehicleColor == color).ToList();
 
             return car;
         }

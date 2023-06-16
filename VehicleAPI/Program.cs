@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using VehicleAPI.ApplicationContext;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.BuildServiceProvider();
+
 // Add services to the container.
 builder.Services.AddScoped(typeof(IVehicleRepository<>), typeof(VehicleRepository<>));
 builder.Services.AddScoped<ICarRepository, CarManager>();

@@ -26,8 +26,14 @@ namespace VehicleAPI.Controllers
         [HttpGet("color")]
         public IActionResult GetColor(string color)
         {
-            var boat = _boatRepository.GetByColor("color");
-            return Ok(boat);
+            //var boat = _boatRepository.GetByColor("color");
+            //return boat;
+
+            var boats = _boatRepository.GetAll().Where(c => c.VehicleColor == color);
+
+            var allSameBoats = new List<Boat>();
+            allSameBoats.AddRange(boats);
+            return Ok(allSameBoats);
         }
 
         [HttpDelete("{id}")]

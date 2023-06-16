@@ -10,13 +10,13 @@ using VehicleAPI.ApplicationContext;
 
 namespace Business.Concrete
 {
-    public class BoatManager : VehicleRepository<Boat>, IBoatRepository
+    public class BoatManager : IBoatRepository
     {
         private readonly VehicleDbContext _context;
         private readonly DbSet<Boat> _dbSet;
 
         public BoatManager(VehicleDbContext context)
-            : base(context)
+            
         {
             _context = context;
             _dbSet = _context.Set<Boat>();
@@ -26,12 +26,7 @@ namespace Business.Concrete
             return _dbSet.OrderBy(c => c.Id).ToList();
         }
 
-        public Boat GetByColor(string color)
-        {
-            return _dbSet.Where(c => c.VehicleColor == color)
-               .FirstOrDefault();
-        }
-
+   
         public bool Delete(int id)
         {
           
@@ -44,6 +39,12 @@ namespace Business.Concrete
                 }
                 return false;
             
+        }
+
+        public List<Boat> GetByColor(string color)
+        {
+            var boat = _dbSet.Where(b => b.VehicleColor == color).ToList();
+            return boat;
         }
     }
 }

@@ -20,10 +20,10 @@ namespace VehicleAPI.ApplicationContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new BoatObjects());
-            //modelBuilder.ApplyConfiguration(new CarObjects());
-            //modelBuilder.ApplyConfiguration(new BusObjects());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfiguration(new BoatObjects());
+            modelBuilder.ApplyConfiguration(new CarObjects());
+            modelBuilder.ApplyConfiguration(new BusObjects());
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

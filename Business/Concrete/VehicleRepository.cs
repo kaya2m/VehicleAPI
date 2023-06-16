@@ -36,6 +36,12 @@ namespace Business.Concrete
             return _dbset.ToList();
         }
 
+        public List<T> GetByColor(string color)
+        {
+            var findColor = _dbset.Where(v=>v.Equals(color)).ToList();
+            return findColor;
+        }
+
         bool IVehicleRepository<T>.Delete(int id)
         {
             var findCar = _dbset.Find(id);

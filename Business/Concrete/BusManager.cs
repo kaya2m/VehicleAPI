@@ -10,13 +10,13 @@ using VehicleAPI.ApplicationContext;
 
 namespace Business.Concrete
 {
-    public class BusManager : VehicleRepository<Bus>, IBusRepository
+    public class BusManager :IBusRepository
     {
         private readonly VehicleDbContext _vehicleDbContext;
         private readonly DbSet<Bus> _dbSet;
 
         public BusManager(VehicleDbContext vehicleDbContext)
-            :base (vehicleDbContext)
+           
         {
             _vehicleDbContext = vehicleDbContext;
             _dbSet = _vehicleDbContext.Set<Bus>();
@@ -27,10 +27,12 @@ namespace Business.Concrete
             return _dbSet.OrderBy(c => c.Id).ToList();
         }
 
-        public Bus GetByColor(string color)
+        public List<Bus> GetByColor(string color)
         {
-            return _dbSet.Where(c => c.VehicleColor == color)
-               .FirstOrDefault();
+            var buses = _dbSet.Where(b => b.VehicleColor == color
+            || (color == null && b.VehicleColor == null))
+                .ToList();
+            return buses;
         }
 
         public bool Delete(int id)

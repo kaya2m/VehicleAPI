@@ -10,6 +10,7 @@ namespace Business.Interfaces
     public interface IVehicleRepository<T>
     {
         List<T> GetAll();
+        List<T> GetByColor(string color);
         bool Delete(int id);
        
     }
