@@ -8,7 +8,7 @@ namespace Entities
 {
     public class Car : Vehicle
     {
-        //teker eklenecek
+        public int Wheels { get; set; }
         public bool HeadlightsStatus { get; set; }
 
     }
